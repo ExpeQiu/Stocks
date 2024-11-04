@@ -1,0 +1,104 @@
+-- 创建数据库
+CREATE DATABASE stock_analysis CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE stock_analysis;
+
+-- 股票基本信息表
+CREATE TABLE stocks (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    code VARCHAR(10) NOT NULL COMMENT '股票代码',
+    name VARCHAR(100) NOT NULL COMMENT '股票名称',
+    market VARCHAR(20) COMMENT '市场类型：A股、港股等',
+    industry VARCHAR(50) COMMENT '所属行业',
+    is_active BOOLEAN DEFAULT TRUE COMMENT '是否活跃',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_code (code)
+) COMMENT '股票基本信息';
+
+-- 股票日线数据表
+CREATE TABLE daily_stock_data (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    stock_id INT NOT NULL,
+    date DATE NOT NULL COMMENT '交易日期',
+    open_price DECIMAL(10,2) COMMENT '开盘价',
+    high_price DECIMAL(10,2) COMMENT '最高价',
+    low_price DECIMAL(10,2) COMMENT '最低价',
+    close_price DECIMAL(10,2) COMMENT '收盘价',
+    volume BIGINT COMMENT '成交量',
+    amount DECIMAL(20,2) COMMENT '成交额',
+    change_percent DECIMAL(6,2) COMMENT '涨跌幅',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_stock_date (stock_id, date),
+    FOREIGN KEY (stock_id) REFERENCES stocks(id),
+    INDEX idx_date (date)
+) COMMENT '股票日线数据';
+
+-- 实时行情数据表
+CREATE TABLE realtime_stock_data (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    stock_id INT NOT NULL,
+    price DECIMAL(10,2) COMMENT '当前价格',
+    volume BIGINT COMMENT '成交量',
+    amount DECIMAL(20,2) COMMENT '成交额',
+    bid_price DECIMAL(10,2) COMMENT '买一价',
+    ask_price DECIMAL(10,2) COMMENT '卖一价',
+    timestamp TIMESTAMP NOT NULL COMMENT '数据时间戳',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (stock_id) REFERENCES stocks(id),
+    INDEX idx_timestamp (timestamp)
+) COMMENT '实时行情数据';
+
+-- 全球市场指数表
+CREATE TABLE market_indices (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL COMMENT '指数名称',
+    code VARCHAR(20) NOT NULL COMMENT '指数代码',
+    current_value DECIMAL(10,2) COMMENT '当前值',
+    change_amount DECIMAL(10,2) COMMENT '涨跌额',
+    change_percent DECIMAL(6,2) COMMENT '涨跌幅',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_code (code)
+) COMMENT '全球市场指数';
+
+-- 技术指标数据表
+CREATE TABLE technical_indicators (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    stock_id INT NOT NULL,
+    date DATE NOT NULL,
+    ma5 DECIMAL(10,2) COMMENT '5日均线',
+    ma10 DECIMAL(10,2) COMMENT '10日均线',
+    ma20 DECIMAL(10,2) COMMENT '20日均线',
+    ma30 DECIMAL(10,2) COMMENT '30日均线',
+    rsi DECIMAL(6,2) COMMENT 'RSI指标',
+    kdj_k DECIMAL(6,2) COMMENT 'KDJ-K值',
+    kdj_d DECIMAL(6,2) COMMENT 'KDJ-D值',
+    kdj_j DECIMAL(6,2) COMMENT 'KDJ-J值',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_stock_date (stock_id, date),
+    FOREIGN KEY (stock_id) REFERENCES stocks(id)
+) COMMENT '技术指标数据';
+
+-- 市场情绪指标表
+CREATE TABLE market_sentiment (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    stock_id INT NOT NULL,
+    date DATE NOT NULL,
+    sentiment_score DECIMAL(5,2) COMMENT '情绪得分(0-100)',
+    volume_ratio DECIMAL(6,2) COMMENT '量比',
+    fund_flow DECIMAL(20,2) COMMENT '资金流向',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_stock_date (stock_id, date),
+    FOREIGN KEY (stock_id) REFERENCES stocks(id)
+) COMMENT '市场情绪指标';
+
+-- 数据同步状态表
+CREATE TABLE sync_status (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    task_name VARCHAR(50) NOT NULL COMMENT '任务名称',
+    last_sync_time TIMESTAMP COMMENT '上次同步时间',
+    status VARCHAR(20) COMMENT '同步状态',
+    error_message TEXT COMMENT '错误信息',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_task (task_name)
+) COMMENT '数据同步状态';
