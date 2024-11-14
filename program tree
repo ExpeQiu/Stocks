@@ -1,0 +1,102 @@
+stock-analysis/
+├── frontend/                # 前端项目（现有的 React 项目）
+│   ├── src/
+│   │   ├── components/     # 现有的组件
+│   │   ├── hooks/         # 自定义 hooks
+│   │   ├── services/      # API 调用服务
+│   │   └── ...
+│   └── ...
+│
+├── backend/                # 后端项目
+│   ├── src/
+│   │   ├── config/        # 配置文件
+│   │   │   ├── database.ts
+│   │   │   ├── redis.ts
+│   │   │   └── app.ts
+│   │   │
+│   │   ├── controllers/   # 控制器
+│   │   │   ├── stockController.ts
+│   │   │   ├── globalMarketController.ts
+│   │   │   └── analysisController.ts
+│   │   │
+│   │   ├── models/        # 数据模型
+│   │   │   ├── Stock.ts
+│   │   │   ├── DailyData.ts
+│   │   │   ├── RealtimeData.ts
+│   │   │   └── GlobalIndex.ts
+│   │   │
+│   │   ├── services/      # 业务服务
+│   │   │   ├── StockDataService.ts
+│   │   │   ├── AnalysisService.ts
+│   │   │   ├── CacheService.ts
+│   │   │   └── ExternalApiService.ts
+│   │   │
+│   │   ├── schedulers/    # 定时任务
+│   │   │   ├── StockDataScheduler.ts
+│   │   │   └── GlobalMarketScheduler.ts
+│   │   │
+│   │   ├── routes/        # 路由
+│   │   │   ├── index.ts
+│   │   │   ├── stockRoutes.ts
+│   │   │   └── marketRoutes.ts
+│   │   │
+│   │   ├── middleware/    # 中间件
+│   │   │   ├── auth.ts
+│   │   │   ├── errorHandler.ts
+│   │   │   └── rateLimiter.ts
+│   │   │
+│   │   ├── utils/         # 工具函数
+│   │   │   ├── dateUtils.ts
+│   │   │   ├── calculationUtils.ts
+│   │   │   └── validators.ts
+│   │   │
+│   │   ├── types/         # TypeScript 类型定义
+│   │   │   ├── stock.ts
+│   │   │   └── market.ts
+│   │   │
+│   │   └── app.ts         # 应用入口
+│   │
+│   ├── prisma/            # Prisma ORM
+│   │   ├── schema.prisma
+│   │   └── migrations/
+│   │
+│   ├── tests/             # 测试文件
+│   │   ├── unit/
+│   │   ├── integration/
+│   │   └── setup.ts
+│   │
+│   ├── scripts/           # 脚本文件
+│   │   ├── seed.ts
+│   │   └── backup.ts
+│   │
+│   ├── logs/              # 日志文件
+│   │   ├── error.log
+│   │   └── access.log
+│   │
+│   ├── .env               # 环境变量
+│   ├── .env.example
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── README.md
+│
+├── docker/                # Docker 配置
+│   ├── docker-compose.yml
+│   ├── Dockerfile.frontend
+│   └── Dockerfile.backend
+│
+├── nginx/                 # Nginx 配置
+│   └── nginx.conf
+│
+├── docs/                  # 项目文档
+│   ├── api.md
+│   ├── setup.md
+│   └── deployment.md
+│
+├── .github/               # GitHub Actions
+│   └── workflows/
+│       ├── frontend.yml
+│       └── backend.yml
+│
+├── .gitignore
+├── package.json
+└── README.md

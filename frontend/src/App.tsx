@@ -1,42 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { StockCodeInput } from './components/StockCodeInput';
 import { StockChart } from './components/StockChart';
-import { DataCard } from './components/DataCard';
-import { MarketSentiment } from './components/MarketSentiment';
-import { PriceRanges } from './components/PriceRanges';
 import { GlobalMarkets } from './components/GlobalMarkets';
 import { VolumeAnalysis } from './components/VolumeAnalysis';
+import { PriceRanges } from './components/PriceRanges';
 import { Returns } from './components/Returns';
-import { StockCodeInput } from './components/StockCodeInput';
-import { LineChart, Activity, BarChart } from 'lucide-react';
-
-// Mock data for candlestick chart
-const mockStockData = Array.from({ length: 30 }, (_, i) => {
-  const basePrice = 250 + Math.random() * 50;
-  const volatility = 5;
-  return {
-    date: new Date(2024, 0, i + 1).toISOString(),
-    open: basePrice,
-    high: basePrice + Math.random() * volatility,
-    low: basePrice - Math.random() * volatility,
-    close: basePrice + (Math.random() - 0.5) * volatility * 2,
-    volume: Math.random() * 1000000
-  };
-});
-
-const mockVolumeData = Array.from({ length: 30 }, (_, i) => ({
-  date: new Date(2024, 0, i + 1).toISOString().split('T')[0],
-  marketVolume: Math.random() * 1000000,
-  stockVolume: Math.random() * 100000
-}));
-
-const mockGlobalIndices = [
-  { name: '美纳指数', value: '16,248.32', change: '+1.25%', trend: 'up' as const },
-  { name: '黄金', value: '2,184.50', change: '+0.45%', trend: 'up' as const },
-  { name: '恒生指数', value: '16,589.45', change: '+0.88%', trend: 'up' as const },
-  { name: '汇率(USD/CNY)', value: '7.1956', change: '-0.15%', trend: 'down' as const },
-  { name: '日经指数', value: '39,098.68', change: '-0.32%', trend: 'down' as const },
-  { name: '国债收益率', value: '4.285%', change: '-0.023', trend: 'down' as const }
-];
+import { useStockData } from './hooks/useStockData';
+import { formatPrice, formatPercent } from './utils/formatters';
 
 function App() {
   const [stockCode, setStockCode] = useState('XXXXX');
